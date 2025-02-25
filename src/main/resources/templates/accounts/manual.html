@@ -3,13 +3,39 @@
       th:replace="~{layout/default :: html(content=~{::content})}">
 <body>
     <div th:fragment="content">
-        <!-- 빈 화면 -->
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col">
-                    <h4 class="text-muted text-center mt-5">
-                        왼쪽 메뉴에서 원하시는 항목을 선택해주세요.
-                    </h4>
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">수기계좌관리</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">일반계좌</h5>
+                                <p class="card-text">일반계좌 등록 및 관리</p>
+                                <a th:href="@{/accounts/register/normal}" class="btn btn-primary">바로가기</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">증권계좌</h5>
+                                <p class="card-text">증권계좌 등록 및 관리</p>
+                                <a th:href="@{/accounts/register/securities}" class="btn btn-primary">바로가기</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">대출계좌</h5>
+                                <p class="card-text">대출계좌 등록 및 관리</p>
+                                <a th:href="@{/accounts/register/loan/limit}" class="btn btn-primary">바로가기</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
