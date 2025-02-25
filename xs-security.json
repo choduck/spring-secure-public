@@ -1,0 +1,31 @@
+{
+    "xsappname": "na-5806ca69-a84a-4c2f-858d-17281181fb04!t56771",
+    "tenant-mode": "dedicated",
+    "scopes": [
+        {
+            "name": "$XSAPPNAME.Display",
+            "description": "Display data"
+        },
+        {
+            "name": "$XSAPPNAME.Create",
+            "description": "Create data"
+        }
+    ],
+    "role-templates": [
+        {
+            "name": "Viewer",
+            "description": "View data",
+            "scope-references": [
+                "$XSAPPNAME.Display"
+            ]
+        },
+        {
+            "name": "Editor",
+            "description": "Edit data",
+            "scope-references": [
+                "$XSAPPNAME.Display",
+                "$XSAPPNAME.Create"
+            ]
+        }
+    ]
+} 

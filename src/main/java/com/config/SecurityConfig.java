@@ -15,11 +15,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeRequests()
-                .anyRequest().permitAll()  // actuator 엔드포인트에 대한 접근 허용
-            .and()
-            .oauth2ResourceServer()
-                .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()));  // JWT를 통한 리소스 서버 인증
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/public/**", "/accounts/**").permitAll()
+                .anyRequest().authenticated()
+            )
+            .oauth2ResourceServer(oauth2 -> oauth2
+                .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
+
         return http.build();
     }
 
