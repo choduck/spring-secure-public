@@ -72,6 +72,9 @@
                     </div>
                     <div class="modal-body">
                         <form id="accountForm" th:action="@{/accounts/register/normal}" method="post">
+                            <!-- CSRF 토큰 제거 -->
+                            <!-- <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> -->
+                            
                             <div class="row mb-3">
                                 <label class="col-sm-2 col-form-label">기업명</label>
                                 <div class="col-sm-10">
@@ -210,7 +213,7 @@
 
         <script type="text/javascript">
             document.addEventListener('DOMContentLoaded', function() {
-                console.log('DOM loaded'); // 디버깅용 로그
+                console.log('DOM loaded');
                 
                 // 전체 체크박스 처리
                 var headerCheckbox = document.querySelector('thead input[type="checkbox"]');
@@ -223,13 +226,12 @@
                     });
                 }
 
-                // 등록 버튼 클릭 시 모달 표시
+                // 등록 버튼 클릭 시 모달 표시 - 순수 JavaScript 사용
                 var registerBtn = document.getElementById('registerBtn');
                 if (registerBtn) {
-                    console.log('Register button found'); // 디버깅용 로그
-                    registerBtn.addEventListener('click', function(e) {
-                        console.log('Register button clicked'); // 디버깅용 로그
-                        e.preventDefault();
+                    console.log('Register button found');
+                    registerBtn.addEventListener('click', function() {
+                        console.log('Register button clicked');
                         
                         // Bootstrap 5 방식으로 모달 표시
                         var registerModal = document.getElementById('registerModal');
@@ -243,7 +245,7 @@
                 } else {
                     console.error('Register button not found');
                 }
-
+                
                 // 저장 버튼 클릭 시 폼 제출
                 var saveBtn = document.getElementById('saveBtn');
                 if (saveBtn) {
