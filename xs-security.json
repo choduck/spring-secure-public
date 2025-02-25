@@ -1,0 +1,58 @@
+{
+  "xsappname": "na-5806ca69-a84a-4c2f-858d-17281181fb04!t56771",
+  "tenant-mode": "dedicated",
+  "scopes": [
+    {
+      "name": "sb-na-5806ca69-a84a-4c2f-858d-17281181fb04!t56771.read",
+      "description": "Allows read access"
+    },
+    {
+      "name": "sb-na-5806ca69-a84a-4c2f-858d-17281181fb04!t56771.write",
+      "description": "Allows write access"
+    }
+  ],
+  "authorities": [
+    {
+      "name": "sb-na-5806ca69-a84a-4c2f-858d-17281181fb04!t56771.Admin",
+      "description": "Admin authority",
+      "granted-apps": [
+        "sb-na-5806ca69-a84a-4c2f-858d-17281181fb04!t56771"
+      ]
+    }
+  ],
+  "role-templates": [
+    {
+      "name": "Viewer",
+      "description": "Role template for viewers",
+      "scope-references": [
+        "sb-na-5806ca69-a84a-4c2f-858d-17281181fb04!t56771.read"
+      ],
+      "attribute-references": []
+    },
+    {
+      "name": "Editor",
+      "description": "Role template for editors",
+      "scope-references": [
+        "sb-na-5806ca69-a84a-4c2f-858d-17281181fb04!t56771.read",
+        "sb-na-5806ca69-a84a-4c2f-858d-17281181fb04!t56771.write"
+      ],
+      "attribute-references": []
+    }
+  ],
+  "roles": [
+    {
+      "name": "ViewerRole",
+      "description": "Role for viewers",
+      "role-template-references": [
+        "Viewer"
+      ]
+    },
+    {
+      "name": "EditorRole",
+      "description": "Role for editors",
+      "role-template-references": [
+        "Editor"
+      ]
+    }
+  ]
+}
