@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cloud.banking.mapper.NormalAccountMapper">
+
+    <!-- 계좌 목록 조회 -->
+    <select id="findAll" resultType="com.cloud.banking.dto.NormalAccount">
+        SELECT 
+            account_id,
+            company_name,
+            group_code,
+            financial_institution,
+            account_number,
+            account_alias,
+            account_type,
+            currency_code,
+            balance,
+            status,
+            start_date,
+            end_date,
+            created_at,
+            updated_at
+        FROM 
+            normal_account
+        ORDER BY 
+            account_id DESC
+    </select>
+    
+    <!-- 계좌 상세 조회 -->
+    <select id="findById" parameterType="long" resultType="com.cloud.banking.dto.NormalAccount">
+        SELECT 
+            account_id,
+            company_name,
+            group_code,
+            financial_institution,
+            account_number,
+            account_alias,
+            account_type,
+            currency_code,
+            balance,
+            status,
+            start_date,
+            end_date,
+            created_at,
+            updated_at
+        FROM 
+            normal_account
+        WHERE 
+            account_id = #{accountId}
+    </select>
+    
+    <!-- 계좌 등록 -->
+    <insert id="insert" parameterType="com.cloud.banking.dto.NormalAccount" useGeneratedKeys="true" keyProperty="accountId">
+        INSERT INTO normal_account (
+            company_name,
+            group_code,
+            financial_institution,
+            account_number,
+            account_alias,
+            account_type,
+            currency_code,
+            balance,
+            status,
+            start_date,
+            end_date
+        ) VALUES (
+            #{companyName},
+            #{groupCode},
+            #{financialInstitution},
+            #{accountNumber},
+            #{accountAlias},
+            #{accountType},
+            #{currencyCode},
+            #{balance},
+            #{status},
+            #{startDate},
+            #{endDate}
+        )
+    </insert>
+    
+</mapper> 

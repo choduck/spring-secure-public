@@ -1,6 +1,9 @@
 package com.cloud.banking.controller;
 
 import com.cloud.banking.dto.ManualAccount;
+import com.cloud.banking.dto.NormalAccount;
+import com.cloud.banking.mapper.NormalAccountMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +15,9 @@ import java.util.List;
 @Controller
 @RequestMapping("/accounts")
 public class ManualAccountController {
+
+    @Autowired
+    private NormalAccountMapper normalAccountMapper;
 
     @GetMapping("/manual")
     public String listAccounts(Model model) {
@@ -42,7 +48,17 @@ public class ManualAccountController {
     // 1. 수기계좌등록 - 일반계좌만 실제 화면, 나머지는 작업중
     @GetMapping("/register/normal")
     public String registerNormal(Model model) {
+        // 일반계좌 목록 조회
+        List<NormalAccount> accounts = normalAccountMapper.findAll();
+        model.addAttribute("accounts", accounts);
         return "accounts/register/normal";
+    }
+
+    // 일반계좌 등록 처리
+    @PostMapping("/register/normal")
+    public String saveNormalAccount(@ModelAttribute NormalAccount account) {
+        normalAccountMapper.insert(account);
+        return "redirect:/accounts/register/normal";
     }
 
     @GetMapping("/register/securities")
