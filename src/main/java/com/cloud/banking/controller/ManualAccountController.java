@@ -47,10 +47,26 @@ public class ManualAccountController {
 
     // 1. 수기계좌등록 - 일반계좌만 실제 화면, 나머지는 작업중
     @GetMapping("/register/normal")
-    public String registerNormal(Model model) {
-        // 일반계좌 목록 조회
-        List<NormalAccount> accounts = normalAccountMapper.findAll();
+    public String registerNormal(Model model, 
+                                @RequestParam(defaultValue = "1") int page,
+                                @RequestParam(defaultValue = "10") int size) {
+        // 페이지 번호는 1부터 시작하지만, offset은 0부터 시작
+        int offset = (page - 1) * size;
+        
+        // 페이징 처리된 계좌 목록 조회
+        List<NormalAccount> accounts = normalAccountMapper.findWithPaging(offset, size);
+        
+        // 전체 계좌 수 조회
+        int totalAccounts = normalAccountMapper.countAll();
+        
+        // 전체 페이지 수 계산
+        int totalPages = (int) Math.ceil((double) totalAccounts / size);
+        
         model.addAttribute("accounts", accounts);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalAccounts", totalAccounts);
+        
         return "accounts/register/normal";
     }
 
