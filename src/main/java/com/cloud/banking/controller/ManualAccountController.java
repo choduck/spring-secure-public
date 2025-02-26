@@ -8,9 +8,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/accounts")
@@ -47,10 +53,75 @@ public class ManualAccountController {
 
     // 1. 수기계좌등록 - 일반계좌만 실제 화면, 나머지는 작업중
     @GetMapping("/register/normal")
-    public String registerNormal(Model model) {
-        // 일반계좌 목록 조회
-        List<NormalAccount> accounts = normalAccountMapper.findAll();
+    public String registerNormal(
+            @RequestParam(required = false) String companyName,
+            @RequestParam(required = false) String financialInstitution,
+            @RequestParam(required = false) String currencyCode,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate,
+            @RequestParam(required = false) String dateRange,
+            @RequestParam(required = false) String accountNumber,
+            Model model) {
+        
+        // 검색 조건 설정
+        Map<String, Object> searchParams = new HashMap<>();
+        
+        if (companyName != null && !companyName.isEmpty()) {
+            searchParams.put("companyName", companyName);
+        }
+        
+        if (financialInstitution != null && !financialInstitution.isEmpty()) {
+            searchParams.put("financialInstitution", financialInstitution);
+        }
+        
+        if (currencyCode != null && !currencyCode.isEmpty()) {
+            searchParams.put("currencyCode", currencyCode);
+        }
+        
+        if (accountNumber != null && !accountNumber.isEmpty()) {
+            searchParams.put("accountNumber", accountNumber);
+        }
+        
+        // 날짜 범위 처리
+        if (dateRange != null && !dateRange.isEmpty()) {
+            LocalDate endLocalDate = LocalDate.now();
+            LocalDate startLocalDate = endLocalDate.minusDays(Integer.parseInt(dateRange));
+            
+            searchParams.put("startDate", startLocalDate.toString());
+            searchParams.put("endDate", endLocalDate.toString());
+        } else {
+            if (startDate != null && !startDate.isEmpty()) {
+                searchParams.put("startDate", startDate);
+            }
+            
+            if (endDate != null && !endDate.isEmpty()) {
+                searchParams.put("endDate", endDate);
+            }
+        }
+        
+        // 검색 조건에 따른 계좌 목록 조회
+        List<NormalAccount> accounts;
+        if (searchParams.isEmpty()) {
+            accounts = normalAccountMapper.findAll();
+        } else {
+            accounts = normalAccountMapper.findBySearchCriteria(searchParams);
+        }
+        
+        // 드롭다운 목록 데이터 준비
+        List<String> companies = Arrays.asList(
+            "(주)삼성전자", "(주)현대자동차", "(주)LG전자", "(주)SK하이닉스", 
+            "(주)네이버", "(주)카카오", "(주)포스코", "(주)롯데케미칼", 
+            "(주)한화솔루션", "(주)신한금융지주"
+        );
+        
+        List<String> banks = Arrays.asList(
+            "한국은행", "산업은행", "기업은행", "국민은행", "하나은행", "수협은행"
+        );
+        
         model.addAttribute("accounts", accounts);
+        model.addAttribute("companies", companies);
+        model.addAttribute("banks", banks);
+        
         return "accounts/register/normal";
     }
 

@@ -4,22 +4,118 @@
 <body>
     <div th:fragment="content">
         <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="card-header">
                 <h5 class="mb-0">계좌정보</h5>
-                <div>
-                    <button class="btn btn-secondary">파일찾기</button>
-                    <button class="btn btn-secondary">파일내리기</button>
-                    <button class="btn btn-secondary">프린트</button>
-                </div>
             </div>
             <div class="card-body">
-                <div class="mb-3 d-flex justify-content-end">
-                    <div class="btn-group">
-                        <button id="registerBtn" class="btn btn-outline-secondary">등록</button>
-                        <button class="btn btn-outline-secondary">수정</button>
-                        <button class="btn btn-outline-secondary">삭제</button>
+                <!-- 검색 폼 -->
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <form id="searchForm" th:action="@{/accounts/register/normal}" method="get" class="row g-3 align-items-center">
+                            <div class="col-auto">
+                                <label class="col-form-label">계좌주:</label>
+                            </div>
+                            <div class="col-auto">
+                                <select class="form-select form-select-sm" name="companyName">
+                                    <option value="">전체</option>
+                                    <option th:each="company : ${companies}" 
+                                            th:value="${company}" 
+                                            th:text="${company}"
+                                            th:selected="${param.companyName == company}"></option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-auto">
+                                <label class="col-form-label">은행:</label>
+                            </div>
+                            <div class="col-auto">
+                                <select class="form-select form-select-sm" name="financialInstitution">
+                                    <option value="">전체</option>
+                                    <option th:each="bank : ${banks}" 
+                                            th:value="${bank}" 
+                                            th:text="${bank}"
+                                            th:selected="${param.financialInstitution == bank}"></option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-auto">
+                                <label class="col-form-label">통화기준:</label>
+                            </div>
+                            <div class="col-auto">
+                                <select class="form-select form-select-sm" name="currencyCode">
+                                    <option value="">전체</option>
+                                    <option value="KRW" th:selected="${param.currencyCode == 'KRW'}">KRW</option>
+                                    <option value="USD" th:selected="${param.currencyCode == 'USD'}">USD</option>
+                                    <option value="JPY" th:selected="${param.currencyCode == 'JPY'}">JPY</option>
+                                    <option value="EUR" th:selected="${param.currencyCode == 'EUR'}">EUR</option>
+                                    <option value="CNY" th:selected="${param.currencyCode == 'CNY'}">CNY</option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-auto">
+                                <label class="col-form-label">등록일자:</label>
+                            </div>
+                            <div class="col-auto">
+                                <input type="date" class="form-control form-control-sm" name="startDate" th:value="${param.startDate}">
+                            </div>
+                            <div class="col-auto">
+                                <span>~</span>
+                            </div>
+                            <div class="col-auto">
+                                <input type="date" class="form-control form-control-sm" name="endDate" th:value="${param.endDate}">
+                            </div>
+                            
+                            <div class="col-auto">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="dateRange" id="radio7" value="7" th:checked="${param.dateRange == '7'}">
+                                    <label class="form-check-label" for="radio7">7일</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="dateRange" id="radio15" value="15" th:checked="${param.dateRange == '15'}">
+                                    <label class="form-check-label" for="radio15">15일</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="dateRange" id="radio30" value="30" th:checked="${param.dateRange == '30'}">
+                                    <label class="form-check-label" for="radio30">30일</label>
+                                </div>
+                            </div>
+                            
+                            <div class="col-auto">
+                                <label class="col-form-label">계좌:</label>
+                            </div>
+                            <div class="col-auto">
+                                <input type="text" class="form-control form-control-sm" name="accountNumber" th:value="${param.accountNumber}" placeholder="계좌번호">
+                            </div>
+                            
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-primary btn-sm">검색</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
+                
+                <!-- 파일 버튼들을 등록/수정/삭제 버튼 바로 위로 이동 -->
+                <div class="row mb-2">
+                    <div class="col-md-12 d-flex justify-content-end">
+                        <div>
+                            <button class="btn btn-secondary">파일찾기</button>
+                            <button class="btn btn-secondary">파일내리기</button>
+                            <button class="btn btn-secondary">프린트</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 등록/수정/삭제 버튼 -->
+                <div class="row mb-3">
+                    <div class="col-md-12 d-flex justify-content-end">
+                        <div class="btn-group">
+                            <button id="registerBtn" class="btn btn-outline-secondary">등록</button>
+                            <button class="btn btn-outline-secondary">수정</button>
+                            <button class="btn btn-outline-secondary">삭제</button>
+                        </div>
+                    </div>
+                </div>
+                
                 <div class="table-responsive">
                     <table class="table table-bordered">
                         <thead class="bg-light">
