@@ -61,6 +61,8 @@ public class ManualAccountController {
             @RequestParam(required = false) String endDate,
             @RequestParam(required = false) String dateRange,
             @RequestParam(required = false) String accountNumber,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
             Model model) {
         
         // 검색 조건 설정
@@ -99,13 +101,26 @@ public class ManualAccountController {
             }
         }
         
-        // 검색 조건에 따른 계좌 목록 조회
+        // 페이지 번호는 1부터 시작하지만, offset은 0부터 시작
+        int offset = (page - 1) * size;
+        
+        // 검색 조건에 따른 계좌 목록 조회 (페이징 처리 포함)
         List<NormalAccount> accounts;
+        int totalAccounts;
+        
         if (searchParams.isEmpty()) {
-            accounts = normalAccountMapper.findAll();
+            accounts = normalAccountMapper.findWithPaging(offset, size);
+            totalAccounts = normalAccountMapper.countAll();
         } else {
+            // 검색 조건이 있는 경우에도 페이징 처리 필요
+            searchParams.put("offset", offset);
+            searchParams.put("pageSize", size);
             accounts = normalAccountMapper.findBySearchCriteria(searchParams);
+            totalAccounts = normalAccountMapper.countBySearchCriteria(searchParams);
         }
+        
+        // 전체 페이지 수 계산
+        int totalPages = (int) Math.ceil((double) totalAccounts / size);
         
         // 드롭다운 목록 데이터 준비
         List<String> companies = Arrays.asList(
@@ -121,6 +136,9 @@ public class ManualAccountController {
         model.addAttribute("accounts", accounts);
         model.addAttribute("companies", companies);
         model.addAttribute("banks", banks);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("totalAccounts", totalAccounts);
         
         return "accounts/register/normal";
     }
